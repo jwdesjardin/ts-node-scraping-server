@@ -9,6 +9,14 @@ const app = express();
 
 express.json();
 
+app.get('/', (req, res) => {
+	try {
+		res.send('Welcome to the NHL Stats API');
+	} catch (error) {
+		console.log('error getting team standings');
+	}
+});
+
 import nhlRoutes from './routes'
 
 app.use('/api', nhlRoutes)
