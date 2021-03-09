@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+console.log('server', process.env.SERVER_API_KEY)
+
 const app = express();
 
 express.json();

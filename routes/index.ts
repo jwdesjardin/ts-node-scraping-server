@@ -1,21 +1,23 @@
 import express from 'express'
+const router = express();
+
+// library functions
 import { getAllGames } from '../lib/games';
 import { getGameSummary } from '../lib/gameSummary';
 import { getGoalieScoring } from '../lib/goalies';
 import { getInjuries } from '../lib/injuries';
 import { getSkatersScoring } from '../lib/skaters';
-const router = express();
-
 import { getTeamStandings } from '../lib/standings'
 import { getTeamData } from '../lib/team';
 
+// middleware
+import { requireAPIKey } from '../middleware/requireAPIKey';
 
 
-// NEW ENDPOINTS
+// ENDPOINTS
 
-
-// returns Conference [ ..., Team[]]
-router.get('/standings', async (req, res) => {
+// returns Conference [ { title,  Team[] } ... ]
+router.get('/standings', requireAPIKey, async (req, res) => {
 	try {
 		const standings = await getTeamStandings();
 		res.json(standings);
@@ -26,7 +28,7 @@ router.get('/standings', async (req, res) => {
 
 
 //returns Skater[]
-router.get('/skaters', async (req, res) => {
+router.get('/skaters', requireAPIKey, async (req, res) => {
 	try {
 		const skaters = await getSkatersScoring();
 		res.json(skaters);
@@ -36,7 +38,7 @@ router.get('/skaters', async (req, res) => {
 });
 
 //returns Goalie[]
-router.get('/goalies', async (req, res) => {
+router.get('/goalies', requireAPIKey, async (req, res) => {
 	try {
 		const goalies = await getGoalieScoring();
 		res.json(goalies);
@@ -46,7 +48,7 @@ router.get('/goalies', async (req, res) => {
 });
 
 //returns Game[]
-router.get('/games', async (req, res) => {
+router.get('/games', requireAPIKey, async (req, res) => {
 	try {
 		const games = await getAllGames();
 		res.json(games);
@@ -55,8 +57,8 @@ router.get('/games', async (req, res) => {
 	}
 });
 
-//returns TeamData: { Injury[], RosterStat[], SkaterScoringStat[], GoalieScoringStat[] }
-router.get('/team/:id', async (req, res) => {
+//returns TeamData: { RosterStat[], SkaterScoringStat[], GoalieScoringStat[] }
+router.get('/team/:id', requireAPIKey, async (req, res) => {
   const { id } = req.params
 	try {
 		const teamData = await getTeamData(id);
@@ -66,8 +68,8 @@ router.get('/team/:id', async (req, res) => {
 	}
 });
 
-//returns
-router.get('/game/:id', async (req, res) => {
+//returns GameSummary : { BoxScore, Period[] (x2), SkaterGameStat[] (x2), GoalieGameStat[] (x2) }
+router.get('/game/:id', requireAPIKey, async (req, res) => {
   const { id } = req.params
 	try {
 		const gameSummary = await getGameSummary(id);
@@ -78,7 +80,7 @@ router.get('/game/:id', async (req, res) => {
 });
 
 //returns Injury []
-router.get('/injuries', async (req, res) => {
+router.get('/injuries', requireAPIKey, async (req, res) => {
 	try {
 		const injuries = await getInjuries();
 		res.json(injuries);
@@ -86,11 +88,6 @@ router.get('/injuries', async (req, res) => {
 		console.log('error getting injuries');
 	}
 });
-
-
-
-
-
 
 
 export default router
