@@ -1,10 +1,9 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-interface Skater {
+interface SkaterScoringStat {
 	_id: number
-	rank: number
-	name: string
+	player: string
 	age: number
 	team_id: string
 	position: string
@@ -14,18 +13,24 @@ interface Skater {
 	points: number
 	plus_minus: number
 	penalty_minutes: number
-	point_share: number
 	ev_goals: number
 	sh_goals: number
 	pp_goals: number
 	gw_goals: number
-	time_on_ice: string
+	shots_on_goal: number
+  shooting_percentage: number
+	time_on_ice: number
 	average_time_on_ice: string
+	blocks: number
+	hits: number
+	faceoff_wins: number
+	faceoff_losses: number
+	faceoff_percentage: number
 }
 
 export const getSkatersScoring = async () => {
 	// initialize an array of skaters to return 
-	const skatersScoring: Skater[] = [];
+	const skatersScoring:  SkaterScoringStat[] = [];
 
 	try {
 		// load the skaters scoring page and access DOM with cheerio
@@ -38,10 +43,9 @@ export const getSkatersScoring = async () => {
 		const table = $('tbody', '#stats');
 
 		$('tr', table).each((_idx, row) => {
-			let skater: Skater = {
+			let skater:  SkaterScoringStat = {
 				_id: _idx,
-				rank: parseInt($('th[data-stat="ranker"]', row).text()),
-				name: $('td[data-stat="player"]', row).text(),
+				player: $('td[data-stat="player"]', row).text(),
 				age: parseInt($('td[data-stat="age"]', row).text()),
 				team_id: $('td[data-stat="team_id"]', row).text(),
 				position: $('td[data-stat="pos"]', row).text(),
@@ -51,13 +55,19 @@ export const getSkatersScoring = async () => {
 				points: parseInt($('td[data-stat="points"]', row).text()),
 				plus_minus: parseInt($('td[data-stat="plus_minus"]', row).text()),
 				penalty_minutes: parseInt($('td[data-stat="pen_min"]', row).text()),
-				point_share: parseFloat($('td[data-stat="ps"]', row).text()),
 				ev_goals: parseInt($('td[data-stat="goals_ev"]', row).text()),
 				sh_goals: parseInt($('td[data-stat="goals_sh"]', row).text()),
 				pp_goals: parseInt($('td[data-stat="goals_pp"]', row).text()),
 				gw_goals: parseInt($('td[data-stat="goals_gw"]', row).text()),
-				time_on_ice: $('td[data-stat="time_on_ice"]', row).text(),
-				average_time_on_ice: $('td[data-stat="time_on_ice_avg"]', row).text()
+				shots_on_goal: parseInt($('td[data-stat="shots"]', row).text()),
+				shooting_percentage: parseFloat($('td[data-stat="shot_pct"]', row).text()),
+				time_on_ice: parseInt($('td[data-stat="time_on_ice"]', row).text()),
+				average_time_on_ice: $('td[data-stat="time_on_ice_avg"]', row).text(),
+				blocks: parseInt($('td[data-stat="blocks"]', row).text()),
+				hits: parseInt($('td[data-stat="hits"]', row).text()),
+				faceoff_wins: parseInt($('td[data-stat="faceoff_wins"]', row).text()),
+				faceoff_losses: parseInt($('td[data-stat="faceoff_losses"]', row).text()),
+				faceoff_percentage: parseFloat($('td[data-stat="faceoff_percentage"]', row).text())
 			}
 			skatersScoring.push(skater)
 		});
