@@ -2,6 +2,7 @@ import express from 'express'
 import { getAllGames } from '../lib/games';
 import { getGameSummary } from '../lib/gameSummary';
 import { getGoalieScoring } from '../lib/goalies';
+import { getInjuries } from '../lib/injuries';
 import { getSkatersScoring } from '../lib/skaters';
 const router = express();
 
@@ -73,6 +74,16 @@ router.get('/game/:id', async (req, res) => {
 		res.json(gameSummary);
 	} catch (error) {
 		console.log('error getting game summary for:', id);
+	}
+});
+
+//returns Injury []
+router.get('/injuries', async (req, res) => {
+	try {
+		const injuries = await getInjuries();
+		res.json(injuries);
+	} catch (error) {
+		console.log('error getting injuries');
 	}
 });
 

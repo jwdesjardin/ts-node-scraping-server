@@ -1,87 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-
-interface Team {
-	// injuries: Injury[]
-  rosterStats: RosterStat[]
-  skaterStats: SkaterScoringStat[]
-  goalieStats: GoalieScoringStat[]
-}
-
-interface Injury {
-  id: number
-  player: string
-  date: string
-  type: string
-  note: string
-}
-
-interface RosterStat {
-  id: number
-  number: number
-  player: string
-  country: string
-  position: string
-  age: number
-  height: string
-  weight: number
-  shoots: string
-  experience: number
-  salary: number | null
-  draft: {
-    year: number | null
-    team_id: string | null
-    round: number | null
-    overall: number | null
-  }
-}
-
-interface  SkaterScoringStat {
-  id: number
-	player: string
-	age: number
-	team_id: string
-	position: string
-	games_played: number
-	goals: number
-	assists: number
-	points: number
-	plus_minus: number
-	penalty_minutes: number
-	ev_goals: number
-	sh_goals: number
-	pp_goals: number
-	gw_goals: number
-	shots_on_goal: number
-  shooting_percentage: number
-	time_on_ice: number
-	average_time_on_ice: string
-	blocks: number
-	hits: number
-	faceoff_wins: number
-	faceoff_losses: number
-	faceoff_percentage: number
-}
-
-interface  GoalieScoringStat {
-  id: number
-	name: string
-	age: number
-	team_id: string
-	position: string
-	games_played: number
-	games_started: number
-  wins: number
-  losses: number
-  ot_losses: number
-	goals_against: number
-	shots_against: number
-	saves: number
-	save_percentage: number
-	goals_against_average: number
-	shutouts: number
-}
-
+import { GoalieScoringStat, RosterStat, SkaterScoringStat, Team } from './types';
 
 
 export const getTeamData = async (team_id: string): Promise<Team | undefined> => {
@@ -93,26 +12,16 @@ export const getTeamData = async (team_id: string): Promise<Team | undefined> =>
 		);
 		const $ = cheerio.load(data);
 
-		// access the stats table and loop through all rows
-		// const injuryTable = $('tbody', '#injuries');
+		
+    // CAN NOT FIND OUT WHY THIS WILL NOT WORK 
+    // const injuryTable = $('tbody', '#injuries');
+    // console.log($(injuryTable).html())
+
+    // access the stats table and loop through all rows
 		const rosterTable = $('tbody', '#roster');
 		const skaterTable = $('tbody', '#skaters');
 		const goalieTable = $('tbody', '#goalies');
 
-    // let injuries: Injury[] = []
-    // console.log($('tr', injuryTable))
-		// $('tr', injuryTable).each((_idx, row) => {
-    //   console.log(_idx)
-		// 	let injury: Injury = {
-		// 		id: _idx,
-		// 		player: $('th[data-stat="player"]>a', row).text(),
-    //     date: $('td[data-stat="date_injury"]', row).text(),
-    //     type: $('td[data-stat="injury_type"]', row).text(),
-    //     note: $('td[data-stat="injury_note"]', row).text(),
-		// 	}
-    //   console.log('posting injury', injury)
-		// 	injuries.push(injury)
-		// });
 
     let rosterStats: RosterStat[] = []
 		$('tr', rosterTable).each((_idx, row) => {

@@ -1,26 +1,10 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-
-interface Team {
-	_id: number,
-	name: string,
-	games: string,
-	wins: string,
-	losses: string,
-	losses_ot: string,
-	points: string,
-	points_pct: string
-}
-
-interface Conference {
-	name: string
-	teams: Team[]
-}
+import { Conference, Team } from './types';
 
 export const getTeamStandings = async () => {
 
 	try {
-
 		// get DOM tree for standings page
 		const { data } = await axios.get(
 			`https://www.hockey-reference.com/leagues/NHL_2021_standings.html`
@@ -57,16 +41,16 @@ export const getTeamStandings = async () => {
 
 			
 			if ($(row).attr('class') === 'full_table'){
-				let team: any = {}
-				team._id = _idx;
-				team.name = $('th[data-stat="team_name"]', row).text();
-				team.games = $('td[data-stat="games"]', row).text();
-				team.wins = $('td[data-stat="wins"]', row).text();
-				team.losses = $('td[data-stat="losses"]', row).text();
-				team.losses_ot = $('td[data-stat="losses_ot"]', row).text();
-				team.points = $('td[data-stat="points"]', row).text();
-				team.points_pct = $('td[data-stat="points_pct"]', row).text();
-				console.log('team', team)
+				let team: Team = {
+					_id: _idx,
+					name: $('th[data-stat="team_name"]', row).text(),
+					games: $('td[data-stat="games"]', row).text(),
+					wins: $('td[data-stat="wins"]', row).text(),
+					losses: $('td[data-stat="losses"]', row).text(),
+					losses_ot: $('td[data-stat="losses_ot"]', row).text(),
+					points: $('td[data-stat="points"]', row).text(),
+					points_pct: $('td[data-stat="points_pct"]', row).text()
+				}
 				const found_conference = standings.find(conference => conference.name === currentConference)
 				if (found_conference){
 					found_conference.teams.push(team);

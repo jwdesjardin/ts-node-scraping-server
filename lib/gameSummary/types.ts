@@ -1,10 +1,10 @@
 export interface GameSummary {
 	scoring_summary: Period[]
-  Penalty_summary: Period[]
-  home_scoring: SkaterGameStat[]
-  home_goalies: GoalieGameStat[]
-  away_scoring: SkaterGameStat[]
-  away_goalies: GoalieGameStat[]
+  penalty_summary: Period[]
+  home_team_scoring: SkaterGameStat[]
+  home_team_goalies: GoalieGameStat[]
+  away_team_scoring: SkaterGameStat[]
+  away_team_goalies: GoalieGameStat[]
   box_score: BoxScore
 }
 
@@ -26,7 +26,6 @@ export interface SkaterGameStat {
   shifts: number
 	time_on_ice: number
 }
-
 export interface GoalieGameStat {
   id: number
 	name: string
@@ -40,21 +39,24 @@ export interface GoalieGameStat {
 
 // boxscore
 export interface BoxScore {
-  date: Date
+  game_details: GameDetails
+  home_scoring_total: TeamBoxScore
+  away_scoring_total: TeamBoxScore
+}
+export interface GameDetails {
+	date: Date
+	time: string
   arena: string
   attendance: number
-  home_scoring: TeamBoxScore
-  away_scoring: TeamBoxScore
 }
-
 export interface TeamBoxScore {
   goals: number
   assists: number
   points: number
-  penatly_minutes: number
+  penalty_minutes: number
   ev_goals: number
   pp_goals: number
-  shots: number
+  shots_on_goal: number
   shooting_percentage: number
 }
 
@@ -62,9 +64,10 @@ export interface TeamBoxScore {
 // types for scoring and penalty summaries
 export interface Period {
   title: string
-  event : Goal[] | Penalty[] | SO_Goal[]
+	penalties?: Penalty[]
+	goals?: Goal[]
+	so_attempts?: SO_Attempt[]
 }
-
 export interface Goal {
   time: string
   team_id: string
@@ -73,15 +76,13 @@ export interface Goal {
   count: number
   assists: string[]
 }
-
-export interface SO_Goal {
+export interface SO_Attempt {
   shot_number: number
   team_id: string
   scorer: string
   success: boolean
   goalie: string
 }
-
 export interface Penalty {
   time: string
   team_id: string
