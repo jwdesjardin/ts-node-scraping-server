@@ -25,5 +25,6 @@ This project will use typescript, node, express to create a server provided nhl 
   - [x] games
   - [x] standings
 - [x] require API key
-- [.] host / deploy
+- [x] host / deploy
 
+demo hosted at: [https://ts-node-scraping-nhl.herokuapp.com/](https://ts-node-scraping-nhl.herokuapp.com/) 
