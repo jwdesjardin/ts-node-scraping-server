@@ -47,6 +47,9 @@ export const getTeamData = async (team_id: string): Promise<Team | undefined> =>
      
       const salary = parseInt($('td[data-stat="salary"]', row).text().replace(/[$,]/g, '')) || null
 
+      const shootsArray = $('td[data-stat="shoots_and_catches"]', row).text().split('/')
+      let shoots = shootsArray[0] === '-' ? shootsArray[1] : shootsArray[0]
+
 			let rosterStat: RosterStat = {
 				id: _idx,
         number: parseInt($('th[data-stat="number"]', row).text()),
@@ -56,7 +59,7 @@ export const getTeamData = async (team_id: string): Promise<Team | undefined> =>
         age: parseInt($('td[data-stat="age"]', row).text()),
         height: $('td[data-stat="height"]', row).text(),
         weight: parseInt($('td[data-stat="weight"]', row).text()),
-        shoots: $('td[data-stat="shoots_and_catches"]', row).text(),
+        shoots,
         experience: parseInt($('td[data-stat="years_experience"]', row).text()),
         salary,
         draft

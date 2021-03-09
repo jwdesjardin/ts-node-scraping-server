@@ -17,6 +17,8 @@ export const getGoalieScoring = async () => {
 		const table = $('tbody', '#stats');
 
 		$('tr', table).each((_idx, row) => {
+			if ($('td[data-stat="player"]', row).text() === '') return 
+
 			let goalie: Goalie = {
 				_id: _idx,
 				name: $('td[data-stat="player"]>a', row).text(),

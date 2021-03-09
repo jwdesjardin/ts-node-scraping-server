@@ -11,13 +11,17 @@ export const getGameSummary = async (gameID: string) => {
 		);
 		const $ = cheerio.load(data);
 
+			// get the ID's of the home and away teams 
+		const home_team_id = gameID.replace(/[\d]{9}/, '')
+		const away_team_id = $('a[itemprop="name"]').attr('href')?.replace(/\/teams\//, '').replace(/\/2021.html/, '');
+
 		// access the stats table and loop through all rows
-		const home_scoring_table = $('tbody', '#ARI_skaters');
-		const home_scoring_totals = $('tfoot', '#ARI_skaters');
-		const home_goalie_table = $('tbody', '#ARI_goalies');
-		const away_scoring_table = $('tbody', '#SJS_skaters');
-		const away_scoring_totals = $('tfoot', '#SJS_skaters');
-		const away_goalie_table = $('tbody', '#SJS_goalies');
+		const home_scoring_table = $('tbody', `#${home_team_id}_skaters`);
+		const home_scoring_totals = $('tfoot', `#${home_team_id}_skaters`);
+		const home_goalie_table = $('tbody', `#${home_team_id}_goalies`);
+		const away_scoring_table = $('tbody', `#${away_team_id}_skaters`);
+		const away_scoring_totals = $('tfoot', `#${away_team_id}_skaters`);
+		const away_goalie_table = $('tbody', `#${away_team_id}_goalies`);
 		const penalty_summary_table = $('tbody', '#penalty');
 		const scoring_summary_table = $('tbody', '#scoring');
 		const game_details_div = $('.scorebox_meta', '.scorebox');
@@ -86,6 +90,7 @@ export const getGameSummary = async (gameID: string) => {
 				penalty_minutes: parseInt($('td[data-stat="pen_min"]', home_scoring_totals).text()),
 				ev_goals: parseInt($('td[data-stat="goals_ev"]', home_scoring_totals).text()),
 				pp_goals: parseInt($('td[data-stat="goals_pp"]', home_scoring_totals).text()),
+				sh_goals: parseInt($('td[data-stat="goals_sh"]', home_scoring_totals).text()),
 				shots_on_goal: parseInt($('td[data-stat="shots"]', home_scoring_totals).text()),
 				shooting_percentage: parseFloat($('td[data-stat="shot_pct"]', home_scoring_totals).text()),
 		} 
@@ -138,6 +143,7 @@ export const getGameSummary = async (gameID: string) => {
 				penalty_minutes: parseInt($('td[data-stat="pen_min"]', away_scoring_totals).text()),
 				ev_goals: parseInt($('td[data-stat="goals_ev"]', away_scoring_totals).text()),
 				pp_goals: parseInt($('td[data-stat="goals_pp"]', away_scoring_totals).text()),
+				sh_goals: parseInt($('td[data-stat="goals_sh"]', away_scoring_totals).text()),
 				shots_on_goal: parseInt($('td[data-stat="shots"]', away_scoring_totals).text()),
 				shooting_percentage: parseFloat($('td[data-stat="shot_pct"]', away_scoring_totals).text()),
 		} 
@@ -154,7 +160,7 @@ export const getGameSummary = async (gameID: string) => {
 			const match_results = penalties_string.match(/\d[\w\s]+Period/)
 		
 			// i have either an array of the penalty or an array with one empty string
-			const penalty_results = (penalties_string.match(/(\d\d:\d\d[\w\-\s]+)/) || [''])[0].split('\n') 
+			const penalty_results = (penalties_string.match(/(\d\d:\d\d[\w\s\-']+)/) || [''])[0].split('\n') 
 			const trimmed_results = penalty_results.map(penalty => penalty.replace(/\\t/g, '').trim())
 
 			if (match_results !== null){
@@ -196,11 +202,11 @@ export const getGameSummary = async (gameID: string) => {
 			const shootout_results = scoring_string.match(/Shootout/)
 		
 			// i have either an array of the scoring or an array with one empty string
-			const scoring_results = (scoring_string.match(/(\d\d:\d\d[\w\-\s\(\),]+)/) || [''])[0].split('\n') 
+			const scoring_results = (scoring_string.match(/(\d\d:\d\d[\w\s\-'\(\),]+)/) || [''])[0].split('\n') 
 			const trimmed_results = scoring_results.map(score => score.replace(/\\t/g, '').trim())
 
 			// i have either an array of the shootout attempt or an array with one empty string
-			const shootout_attempt_match = (scoring_string.match(/\d+[\w\-\s]+(un)?successful\sattempt\sversus[\w\-\s]+/) || [''])[0].split('\n')
+			const shootout_attempt_match = (scoring_string.match(/\d+[\w\s\-']+(un)?successful\sattempt\sversus[\w\s\-']+/) || [''])[0].split('\n')
 			const shootout_trimmed_results = shootout_attempt_match.map(score => score.replace(/\\t/g, '').trim())
 			
 			if (period_results !== null){

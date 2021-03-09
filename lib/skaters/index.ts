@@ -17,6 +17,8 @@ export const getSkatersScoring = async () => {
 		// access the stats table and loop through all rows
 		const table = $('tbody', '#stats');
 		$('tr', table).each((_idx, row) => {
+			if ($('td[data-stat="player"]', row).text() === '') return 
+
 			let skater:  SkaterScoringStat = {
 				_id: _idx,
 				player: $('td[data-stat="player"]', row).text(),

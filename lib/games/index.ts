@@ -19,13 +19,13 @@ export const getAllGames = async () => {
 		$('tr', table).each((_idx, row) => {
 			let game: Game = {
 				id: _idx,
-				date: new Date($('th[data-stat="date_game"]>a', row).text()),
+				date: new Date($('th[data-stat="date_game"]', row).text()),
 				away_team: $('td[data-stat="visitor_team_name"]', row).text(),
 				away_goals: parseInt($('td[data-stat="visitor_goals"]', row).text()),
 				home_team: $('td[data-stat="home_team_name"]', row).text(),
 				home_goals: parseInt($('td[data-stat="home_goals"]', row).text()),
 				overtime: $('td[data-stat="overtimes"]', row).text(),
-			  attendance: parseInt($('td[data-stat="pos"]', row).text()),
+			  attendance: parseInt($('td[data-stat="attendance"]', row).text().replace(/,/g, '')),
 				length_of_game: $('td[data-stat="game_duration"]', row).text(),
 			  notes: $('td[data-stat="game_remarks"]', row).text(),
 			}

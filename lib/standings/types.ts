@@ -1,15 +1,15 @@
-export interface Team {
+export interface TeamSeasonStats {
 	_id: number,
 	name: string,
-	games: string,
-	wins: string,
-	losses: string,
-	losses_ot: string,
-	points: string,
-	points_pct: string
+	games: number,
+	wins: number,
+	losses: number,
+	losses_ot: number,
+	points: number,
+	points_pct: number
 }
 
 export interface Conference {
 	name: string
-	teams: Team[]
+	teams: TeamSeasonStats[]
 }

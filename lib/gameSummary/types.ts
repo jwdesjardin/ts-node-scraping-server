@@ -56,6 +56,7 @@ export interface TeamBoxScore {
   penalty_minutes: number
   ev_goals: number
   pp_goals: number
+  sh_goals: number
   shots_on_goal: number
   shooting_percentage: number
 }
