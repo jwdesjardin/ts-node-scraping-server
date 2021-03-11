@@ -8,9 +8,9 @@ This project will use typescript, node, express to create a server provided nhl 
 - [x] /api/games 
 - [x] /api/skaters 
 - [x] /api/goalies 
-- [x] /api/team/:teamID (missing injuries) 
+- [x] /api/team/:teamID 
 - [x] /api/game/:gameID 
-
+- [x] /api/injuries
 
 ## todo list 
 
