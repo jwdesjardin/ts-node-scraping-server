@@ -34,7 +34,7 @@ export const getTeamData = async (team_id: string): Promise<Team | undefined> =>
         draft = {
           year: parseInt(draftText[0]),
           team_id: draftText[1],
-          round: parseInt(draftText[2]),
+          round: draftText[2],
           overall: parseInt(draftText[3].replace(/[\(\)]/g, '')),
         }
       }

@@ -17,6 +17,12 @@ export const getInjuries = async (): Promise<Injury[] | undefined> => {
         id: _idx,
         player: $('th[data-stat="player"]>a', row).text(),
         player_id: $('th[data-stat="player"]', row).attr('data-append-csv') || '',
+        team: $('td[data-stat="team_name"]', row).text(),
+        team_id: ($('td[data-stat="team_name"]', row)
+          .html()
+          ?.match(/teams\/[\w]{3}\//) || [''])[0]
+          .replace(/teams\//, '')
+          .replace(/\//, ''),
         date: $('td[data-stat="date_injury"]', row)
           .text()
           .replace(/[\w]{3},\s/, ''),
