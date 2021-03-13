@@ -179,7 +179,7 @@ export const getGameSummary = async (gameID: string) => {
       const match_results = penalties_string.match(/\d[\w\s]+Period/)
 
       // i have either an array of the penalty or an array with one empty string
-      const penalty_results = (penalties_string.match(/(\d\d:\d\d[\w\s\-']+)/) || [''])[0].split(
+      const penalty_results = (penalties_string.match(/(\d\d:\d\d[\w\s\-ä.']+)/) || [''])[0].split(
         '\n'
       )
       const trimmed_results = penalty_results.map((penalty) => penalty.replace(/\\t/g, '').trim())
@@ -225,14 +225,14 @@ export const getGameSummary = async (gameID: string) => {
       const shootout_results = scoring_string.match(/Shootout/)
 
       // i have either an array of the scoring or an array with one empty string
-      const scoring_results = (scoring_string.match(/(\d\d:\d\d[\w\s\-'\(\),]+)/) || [''])[0].split(
-        '\n'
-      )
+      const scoring_results = (scoring_string.match(/(\d\d:\d\d[\w\s\-'ä.\(\),]+)/) || [
+        '',
+      ])[0].split('\n')
       const trimmed_results = scoring_results.map((score) => score.replace(/\\t/g, '').trim())
 
       // i have either an array of the shootout attempt or an array with one empty string
       const shootout_attempt_match = (scoring_string.match(
-        /\d+[\w\s\-']+(un)?successful\sattempt\sversus[\w\s\-']+/
+        /\d+[\w\s\-ä.']+(un)?successful\sattempt\sversus[\w\s\-ä.']+/
       ) || [''])[0].split('\n')
       const shootout_trimmed_results = shootout_attempt_match.map((score) =>
         score.replace(/\\t/g, '').trim()
