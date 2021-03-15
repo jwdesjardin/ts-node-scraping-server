@@ -43,6 +43,13 @@ export const getGoalieScoring = async () => {
           shutouts: parseInt($('td[data-stat="shutouts"]', row).text()),
         }
         goalieScoring.push(goalie)
+      } else {
+        if (goalieScoring[goalieScoring.length - 1].team_id === 'TOT') {
+          goalieScoring[goalieScoring.length - 1].team_id = $(
+            'td[data-stat="team_id"]>a',
+            row
+          ).text()
+        }
       }
     })
 

@@ -50,6 +50,13 @@ export const getSkatersScoring = async () => {
           faceoff_percentage: parseFloat($('td[data-stat="faceoff_percentage"]', row).text()),
         }
         skatersScoring.push(skater)
+      } else {
+        if (skatersScoring[skatersScoring.length - 1].team_id === 'TOT') {
+          skatersScoring[skatersScoring.length - 1].team_id = $(
+            'td[data-stat="team_id"]>a',
+            row
+          ).text()
+        }
       }
     })
 
